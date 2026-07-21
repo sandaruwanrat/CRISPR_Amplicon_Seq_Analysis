@@ -1,0 +1,4 @@
+*.fastq.gz
+*.bam
+*.sam
+*.vcf.gz
