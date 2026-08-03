@@ -25,7 +25,7 @@ declare -A REF_GENOMES=(
 )
 
 
-# create gatk refence
+# create gatk refencessh-add ~/.ssh/id_ed25519
 
 
 for ref_name in "${!REF_GENOMES[@]}"; do
@@ -81,3 +81,56 @@ for file in ${BAM_TG_DIR}/*_sorted_RGtg.bam;
   
 done
 
+
+
+#subset VCF files
+
+BED_DIR="${BASE_DIR}/Ref_junction_PM20_bed"
+VCF_SUBSET="${VCF_DIR}/VCF_SUBSET_40bp"
+
+
+mkdir -p "${VCF_SUBSET}"
+
+
+#40 bp bed_files
+declare -A REF_BEDS=(
+  [d1_up]="${BED_DIR}/ACT8_mPing_d1_up.bed"
+  [d1_dw]="${BED_DIR}/ACT8_mPing_d1_down.bed"
+  [d2_up]="${BED_DIR}/ACT8_mPIng_d2_up.bed"
+  [d2_dw]="${BED_DIR}/ACT8_mPIng_d2_down.bed"
+)
+
+
+
+for file in ${VCF_DIR}/*.vcf.gz; 
+	do
+
+ 	basename=$(basename "$file" _nmkd.vcf.gz)
+ 	echo ${basename}
+ 	fnm=${basename%%_*}
+	echo ${fnm}
+
+	echo "sample >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${fnm}"
+
+	##get jucntion (d1_up, d1_dw, d2_up, d2_dw)
+    j_tag=$(echo "$basename" | grep -oE 'd[12]_(up|dw)')
+
+	#check missing tag
+	if [[ -z "$j_tag" ]]; then
+        echo "ERROR: Could not determine junction for $basename" >&2
+        continue
+    fi
+
+	ref="${REF_BEDS[$j_tag]}"
+	
+	
+	echo "junction>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${j_tag}"
+
+
+	bcftools view -R ${ref} "${file}" -Oz -o "${VCF_SUBSET}/${basename}_nmkd.vcf.gz"
+	bcftools index "${VCF_SUBSET}/${basename}_nmkd.vcf.gz"
+		
+	   
+	
+  
+done
