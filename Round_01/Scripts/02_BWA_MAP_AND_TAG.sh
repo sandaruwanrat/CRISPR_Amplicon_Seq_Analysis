@@ -12,7 +12,7 @@ module load samtools/1.20_gcc_12.3.0
 
 #Mapping
 ############################################################
-REF_DIR='/cluster/pixstor/slotkinr-lab/sandaruwan/amplicon_seq/analysis/reference/Ref_R18'
+REF_DIR='/cluster/pixstor/slotkinr-lab/sandaruwan/amplicon_seq/analysis/CRISPR_Amplicon_Seq_Analysis/Round_01/Ref_R1'
 
 
 BASE_DIR='/cluster/pixstor/slotkinr-lab/sandaruwan/amplicon_seq/'
@@ -91,7 +91,7 @@ rm *_aligned.sam
 
 module load picard/3.2.0
 
-OUT_TG_DIR="$BASE_DIR/02_TRIMMED_READS/02_MAPPING/BAM_FILES/SORTED_TG_BAM"
+OUT_TG_DIR="$BASE_DIR/02_TRIMMED_READS/02_MAPPING/SORTED_TG_BAM"
 
 
 
